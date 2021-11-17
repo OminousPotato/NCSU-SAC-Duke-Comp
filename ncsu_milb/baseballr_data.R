@@ -2,7 +2,7 @@
 
 library(tidyverse)
 
-devtools::install_github("BillPetti/baseballr")
+#devtools::install_github("BillPetti/baseballr")
 
 library(baseballr)
 
@@ -50,6 +50,8 @@ wWilson <- baseballr::milb_batter_game_logs_fg("sa3009871", year = 2021)
 
 jButler <- baseballr::milb_batter_game_logs_fg("sa3017292", year = 2021)
 
+vlad_dates <- vlad %>%
+  pull(Date)
 
 
 

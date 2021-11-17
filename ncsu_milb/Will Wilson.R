@@ -183,26 +183,26 @@ get_pbp_mlb <- function(game_pk) {
 
 
 #####################################################################
-### Patrick Bailey Data
+### Will Wilson  Data
 #####################################################################
-giants <- map_df(.x = seq.Date(as.Date("2021-01-01"), 
-                              as.Date("2021-09-08"), 
-                              'day'),
-                .f = get_game_pks,
-                level_ids = c(13, 14)) %>% 
-  filter(away_team == "San Jose Giants" | home_team == "San Jose Giants" | away_team == "Eugene Emeralds" | home_team == "Eugene Emeralds") %>% 
+emeralds <- map_df(.x = seq.Date(as.Date("2021-01-01"), 
+                               as.Date("2021-09-08"), 
+                               'day'),
+                 .f = get_game_pks,
+                 level_ids = c(13)) %>% 
+  filter(away_team == "Eugene Emeralds" | home_team == "Eugene Emeralds") %>% 
   pull(gameid)
 
 
-pbp <- map_df(.x = giants,
+pbp <- map_df(.x = emeralds,
               .f = get_pbp_mlb)
-# Only Bailey
-bailey <- pbp %>% 
-  filter(matchup.batter.fullName == "Patrick Bailey")
+# Only Wilson
+wilson <- pbp %>% 
+  filter(matchup.batter.fullName == "Will Wilson")
 
 
 
-filtered_bailey <- bailey %>%
+filtered_wilson <- wilson %>%
   # Gets Rid of Informational Events
   # Like Pitching Changes
   filter(isPitch) %>%
@@ -218,14 +218,14 @@ filtered_bailey <- bailey %>%
   )
 
 # Flip y coordinate for hitting data
-filtered_bailey$hitData.coordinates.coordY = -1 * filtered_bailey$hitData.coordinates.coordY
+filtered_wilson$hitData.coordinates.coordY = -1 * filtered_wilson$hitData.coordinates.coordY
 
 ####################################################################################
 ##Plot the data! Woo!
 ####################################################################################
 
 
-ggplot(data = filtered_bailey,
+ggplot(data = filtered_wilson,
        aes(x = hitData.coordinates.coordX,
            y = hitData.coordinates.coordY)) +
   geom_hex(bins = 10) +
@@ -244,13 +244,13 @@ ggplot(data = filtered_bailey,
   ylim(-250, 0) +
   theme_void() +
   scale_fill_gradient(low = "white",
-                      high = "red") +
-  labs(title = "Patrick Bailey Hitting",
-       subtitle = "Results of At Bats at Class A San Jose Giants",
+                      high = "darkorange3") +
+  labs(title = "Will Wilson Hitting",
+       subtitle = "Results of At Bats at Class A+ Eugene Emeralds",
        caption = "Data Viz by Brian Yngve | With code from Bill Petti and Billy Fryer | Data from MLB API via baseballr package",
        fill = "Frequency") +
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5),
         plot.caption = element_text(hjust = 0.5))
 
-ggsave("patrickBailey1.jpg")
+ggsave("willWilson1.jpg")
